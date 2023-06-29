@@ -215,7 +215,7 @@ function initRestabook() {
     $(window).on('resize', function () {
         if (!resize2) {
             resize2 = true;
-            (!window.requestAnimationFrame) ? setTimeout(setLayerDimensions2, 300): window.requestAnimationFrame(setLayerDimensions2);
+            (!window.requestAnimationFrame) ? setTimeout(setLayerDimensions2, 300) : window.requestAnimationFrame(setLayerDimensions2);
         }
     });
     $(".change_bg a").on("click", function () {
@@ -255,6 +255,113 @@ function initRestabook() {
         });
         resize2 = false;
     }
+    //первый слайдер
+    const swiper = document.querySelectorAll('.fa-swiper');
+    const prevSwiper = document.querySelector('.fa-caret-left');
+    const nextSwiper = document.querySelector('.fa-caret-right');
+
+    let currentSwiper = 0;
+
+    function showSlide(index) {
+        swiper.forEach(slide => {
+            slide.style.display = 'none';
+        });
+        swiper[index].style.display = 'block';
+    }
+
+    function prevSlide() {
+        currentSwiper--;
+        if (currentSwiper < 0) {
+            currentSwiper = swiper.length - 1;
+        }
+        showSlide(currentSwiper);
+    }
+
+    function nextSlide() {
+        currentSwiper++;
+        if (currentSwiper >= swiper.length) {
+            currentSwiper = 0;
+        }
+        showSlide(currentSwiper);
+    }
+
+    prevSwiper.addEventListener('click', prevSlide);
+    nextSwiper.addEventListener('click', nextSlide);
+
+    showSlide(currentSwiper);
+
+    //второй слайдер
+
+    //tabs menu для menu.html
+    const tabs = document.querySelectorAll('.tabheader__item');
+    const tabsContent = document.querySelectorAll('.tab');
+    const tabsParent = document.querySelector('.tabs-menu');
+
+    function hideTabContent() {
+        tabsContent.forEach(item => item.classList.add('hide'));
+        tabs.forEach(item => item.classList.remove('tabheader__item_active'));
+    }
+
+    function showTabContent(i = 0) {
+        tabsContent[i].classList.remove('hide');
+        tabs[i].classList.add('tabheader__item_active');
+    }
+
+    hideTabContent();
+    showTabContent();
+
+    tabsParent.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target && target.classList.contains('tabheader__item')) {
+            tabs.forEach((item, i) => {
+                if (target === item) {
+                    hideTabContent();
+                    showTabContent(i);
+                }
+            });
+        }
+    });
+
+    //timer для coming-soon
+    function countdown(endDate) {
+        const daysElement = document.querySelector('.days');
+        const hoursElement = document.querySelector('.hours');
+        const minutesElement = document.querySelector('.minutes');
+        const secondsElement = document.querySelector('.seconds');
+
+        function updateCountdown() {
+            const currentTime = new Date();
+            const timeDifference = endDate - currentTime;
+
+            if (timeDifference <= 0) {
+                daysElement.textContent = '0';
+                hoursElement.textContent = '0';
+                minutesElement.textContent = '0';
+                secondsElement.textContent = '0';
+                return;
+            }
+
+            let totalSeconds = Math.floor(timeDifference / 1000);
+            const days = Math.floor(totalSeconds / (60 * 60 * 24));
+            totalSeconds %= 60 * 60 * 24;
+            const hours = Math.floor(totalSeconds / (60 * 60));
+            totalSeconds %= 60 * 60;
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+
+            daysElement.textContent = days;
+            hoursElement.textContent = hours;
+            minutesElement.textContent = minutes;
+            secondsElement.textContent = seconds;
+        }
+
+        setInterval(updateCountdown, 1000);
+    }
+
+    const endDate = new Date(2023, 7, 20, 0, 0, 0);
+    countdown(endDate);
+
+
     //   slider / carousel ------------------
     function inintsingleSlider() {
         if ($(".single-slider").length > 0) {
@@ -280,7 +387,7 @@ function initRestabook() {
         }
     }
     inintsingleSlider();
-    
+
     if ($(".product-slider").length > 0) {
         var j2 = new Swiper(".product-slider .swiper-container", {
             preloadImages: false,
@@ -518,7 +625,7 @@ function initRestabook() {
     $(window).on('resize', function () {
         if (!resize3) {
             resize3 = true;
-            (!window.requestAnimationFrame) ? setTimeout(setLayerDimensions3, 300): window.requestAnimationFrame(setLayerDimensions3);
+            (!window.requestAnimationFrame) ? setTimeout(setLayerDimensions3, 300) : window.requestAnimationFrame(setLayerDimensions3);
         }
     });
     function setLayerDimensions3() {
@@ -814,7 +921,7 @@ function initparallax() {
 }
 document.addEventListener('gesturestart', function (e) {
     e.preventDefault();
-}); 
+});
 //   Init All ------------------
 $(document).ready(function () {
     initRestabook();
