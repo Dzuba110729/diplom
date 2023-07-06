@@ -2210,8 +2210,8 @@ section.parallax-section.hero-section .section-title h2 {
 }
 .tab-content   {
     width: 100%;
-    display: none;
-	float:left;
+	 display: none;
+	 float:left;
 }
 .tab{
     width: 100%;

@@ -257,8 +257,8 @@ function initRestabook() {
     }
     //первый слайдер
     const swiper = document.querySelectorAll('.fa-swiper');
-    const prevSwiper = document.querySelector('.fa-caret-left');
-    const nextSwiper = document.querySelector('.fa-caret-right');
+    const prevSwiper = document.querySelector('.ec-button-prev');
+    const nextSwiper = document.querySelector('.ec-button-next');
 
     let currentSwiper = 0;
 
@@ -291,76 +291,95 @@ function initRestabook() {
     showSlide(currentSwiper);
 
     //второй слайдер
+    const slides = document.querySelectorAll('.tc-swiper'),
+	      prev = document.querySelector('.tc-button-prev'),
+	      next = document.querySelector('.tc-button-next');
 
-    //tabs menu для menu.html
-    const tabs = document.querySelectorAll('.tabheader__item');
-    const tabsContent = document.querySelectorAll('.tab');
-    const tabsParent = document.querySelector('.tabs-menu');
+	let slideIndex = 1;
+	showSlides(slideIndex);
 
-    function hideTabContent() {
-        tabsContent.forEach(item => item.classList.add('hide'));
-        tabs.forEach(item => item.classList.remove('tabheader__item_active'));
+	function showSlides(n) {
+		slideIndex = n > slides.length ? 1 : n < 1 ? slides.length : n;
+
+		slides.forEach(item => {
+			item.classList.remove('show');
+			item.classList.add('hide');
+		});
+
+		slides[slideIndex - 1].classList.add('show');
+		slides[slideIndex - 1].classList.remove('hide');
+	}
+
+	function plusSlides(n) {
+		showSlides(slideIndex += n);
+	}
+
+	prev.addEventListener('click', () => plusSlides(-1));
+	next.addEventListener('click', () => plusSlides(1));
+
+    //tabs menu
+    const tabs = document.querySelectorAll('.tab-item');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    function changeTab(tabIndex) {
+        // Удаление класса "current" у всех вкладок
+        tabs.forEach(tab => tab.classList.remove('current'));
+
+        // Добавление класса "current" для выбранной вкладки
+        tabs[tabIndex].classList.add('current');
+
+        // Скрытие всех содержимых вкладок
+        tabContents.forEach(content => content.style.display = 'none');
+
+        // Отображение содержимого выбранной вкладки
+        tabContents[tabIndex].style.display = 'block';
     }
 
-    function showTabContent(i = 0) {
-        tabsContent[i].classList.remove('hide');
-        tabs[i].classList.add('tabheader__item_active');
-    }
-
-    hideTabContent();
-    showTabContent();
-
-    tabsParent.addEventListener('click', (event) => {
-        const target = event.target;
-        if (target && target.classList.contains('tabheader__item')) {
-            tabs.forEach((item, i) => {
-                if (target === item) {
-                    hideTabContent();
-                    showTabContent(i);
-                }
-            });
-        }
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+            changeTab(index);
+        });
     });
 
     //timer для coming-soon
-    function countdown(endDate) {
-        const daysElement = document.querySelector('.days');
-        const hoursElement = document.querySelector('.hours');
-        const minutesElement = document.querySelector('.minutes');
-        const secondsElement = document.querySelector('.seconds');
+    const daysElement = document.querySelector('.cs-media-container .days.rot');
+    const hoursElement = document.querySelector('.cs-media-container .hours.rot');
+    const minutesElement = document.querySelector('.cs-media-container .minutes.rot2');
+    const secondsElement = document.querySelector('.cs-media-container .seconds.rot2');
 
-        function updateCountdown() {
-            const currentTime = new Date();
-            const timeDifference = endDate - currentTime;
+    // Устанавливаем целевую дату и время обратного отсчета (год, месяц (начиная с 0), день, часы, минуты, секунды)
+    const targetDate = new Date(2023, 8, 12, 0, 0, 0);
 
-            if (timeDifference <= 0) {
-                daysElement.textContent = '0';
-                hoursElement.textContent = '0';
-                minutesElement.textContent = '0';
-                secondsElement.textContent = '0';
-                return;
-            }
+    function updateCountdown() {
+        // Получаем текущую дату и время
+        const currentDate = new Date();
 
-            let totalSeconds = Math.floor(timeDifference / 1000);
-            const days = Math.floor(totalSeconds / (60 * 60 * 24));
-            totalSeconds %= 60 * 60 * 24;
-            const hours = Math.floor(totalSeconds / (60 * 60));
-            totalSeconds %= 60 * 60;
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
+        // Рассчитываем оставшееся время в миллисекундах
+        const timeRemaining = targetDate - currentDate;
 
-            daysElement.textContent = days;
-            hoursElement.textContent = hours;
-            minutesElement.textContent = minutes;
-            secondsElement.textContent = seconds;
-        }
+        // Рассчитываем оставшиеся дни, часы, минуты и секунды
+        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
-        setInterval(updateCountdown, 1000);
+        // Выводим оставшееся время на страницу
+        daysElement.textContent = padZero(days);
+        hoursElement.textContent = padZero(hours);
+        minutesElement.textContent = padZero(minutes);
+        secondsElement.textContent = padZero(seconds);
     }
 
-    const endDate = new Date(2023, 7, 20, 0, 0, 0);
-    countdown(endDate);
+    // Добавляем нули слева от чисел при необходимости
+    function padZero(number) {
+        return number.toString().padStart(2, '0');
+    }
 
+    // Обновляем таймер каждую секунду
+    setInterval(updateCountdown, 1000);
+
+    // Начальное обновление таймера
+    updateCountdown();
 
     //   slider / carousel ------------------
     function inintsingleSlider() {
