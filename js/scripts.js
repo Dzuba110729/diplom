@@ -292,94 +292,30 @@ function initRestabook() {
 
     //второй слайдер
     const slides = document.querySelectorAll('.tc-swiper'),
-	      prev = document.querySelector('.tc-button-prev'),
-	      next = document.querySelector('.tc-button-next');
+        prev = document.querySelector('.tc-button-prev'),
+        next = document.querySelector('.tc-button-next');
 
-	let slideIndex = 1;
-	showSlides(slideIndex);
+    let slideIndex = 1;
+    showSlides(slideIndex);
 
-	function showSlides(n) {
-		slideIndex = n > slides.length ? 1 : n < 1 ? slides.length : n;
+    function showSlides(n) {
+        slideIndex = n > slides.length ? 1 : n < 1 ? slides.length : n;
 
-		slides.forEach(item => {
-			item.classList.remove('show');
-			item.classList.add('hide');
-		});
-
-		slides[slideIndex - 1].classList.add('show');
-		slides[slideIndex - 1].classList.remove('hide');
-	}
-
-	function plusSlides(n) {
-		showSlides(slideIndex += n);
-	}
-
-	prev.addEventListener('click', () => plusSlides(-1));
-	next.addEventListener('click', () => plusSlides(1));
-
-    //tabs menu
-    const tabs = document.querySelectorAll('.tab-item');
-    const tabContents = document.querySelectorAll('.tab-content');
-
-    function changeTab(tabIndex) {
-        // Удаление класса "current" у всех вкладок
-        tabs.forEach(tab => tab.classList.remove('current'));
-
-        // Добавление класса "current" для выбранной вкладки
-        tabs[tabIndex].classList.add('current');
-
-        // Скрытие всех содержимых вкладок
-        tabContents.forEach(content => content.style.display = 'none');
-
-        // Отображение содержимого выбранной вкладки
-        tabContents[tabIndex].style.display = 'block';
-    }
-
-    tabs.forEach((tab, index) => {
-        tab.addEventListener('click', () => {
-            changeTab(index);
+        slides.forEach(item => {
+            item.classList.remove('show');
+            item.classList.add('hide');
         });
-    });
 
-    //timer для coming-soon
-    const daysElement = document.querySelector('.cs-media-container .days.rot');
-    const hoursElement = document.querySelector('.cs-media-container .hours.rot');
-    const minutesElement = document.querySelector('.cs-media-container .minutes.rot2');
-    const secondsElement = document.querySelector('.cs-media-container .seconds.rot2');
-
-    // Устанавливаем целевую дату и время обратного отсчета (год, месяц (начиная с 0), день, часы, минуты, секунды)
-    const targetDate = new Date(2023, 8, 12, 0, 0, 0);
-
-    function updateCountdown() {
-        // Получаем текущую дату и время
-        const currentDate = new Date();
-
-        // Рассчитываем оставшееся время в миллисекундах
-        const timeRemaining = targetDate - currentDate;
-
-        // Рассчитываем оставшиеся дни, часы, минуты и секунды
-        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-        // Выводим оставшееся время на страницу
-        daysElement.textContent = padZero(days);
-        hoursElement.textContent = padZero(hours);
-        minutesElement.textContent = padZero(minutes);
-        secondsElement.textContent = padZero(seconds);
+        slides[slideIndex - 1].classList.add('show');
+        slides[slideIndex - 1].classList.remove('hide');
     }
 
-    // Добавляем нули слева от чисел при необходимости
-    function padZero(number) {
-        return number.toString().padStart(2, '0');
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
     }
 
-    // Обновляем таймер каждую секунду
-    setInterval(updateCountdown, 1000);
-
-    // Начальное обновление таймера
-    updateCountdown();
+    prev.addEventListener('click', () => plusSlides(-1));
+    next.addEventListener('click', () => plusSlides(1));
 
     //   slider / carousel ------------------
     function inintsingleSlider() {
